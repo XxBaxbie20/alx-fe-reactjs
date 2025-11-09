@@ -16,6 +16,7 @@ import UserContext from './UserContext';
 function App() {
   const [count, setCount] = useState(0);
 
+  // user data to share globally
   const userData = {
     name: "Alice",
     age: 25,
@@ -33,13 +34,13 @@ function App() {
         </a>
       </div>
 
-      {/* Custom components */}
+      {/* custom components */}
       <WelcomeMessage />
       <Header />
       <MainContent />
       <Footer />
-      <UserProfile /> {/* Context provides the data directly */}
-      {/* End of custom components */}
+      <UserProfile /> {/* Notice: No props passed anymore */}
+      {/* end of custom components */}
 
       <h1>Vite + React</h1>
       <div className="card">
