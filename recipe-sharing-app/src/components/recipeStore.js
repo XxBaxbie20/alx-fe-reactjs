@@ -31,6 +31,58 @@ const applyFilters = (recipes, searchTerm, filters) => {
   });
 };
 
+const extractKeywords = (text = '') =>
+  text
+    .split(/,|\s+/)
+    .map((word) => word.trim().toLowerCase())
+    .filter((word) => word.length > 2);
+
+const computeRecommendations = (recipes, favorites) => {
+  if (!recipes.length || !favorites.length) return [];
+
+  const favoriteRecipes = recipes.filter((recipe) =>
+    favorites.includes(recipe.id)
+  );
+
+  if (!favoriteRecipes.length) return [];
+
+  const keywordSet = new Set();
+  favoriteRecipes.forEach((recipe) => {
+    extractKeywords(recipe.ingredients).forEach((keyword) =>
+      keywordSet.add(keyword)
+    );
+    extractKeywords(recipe.title).forEach((keyword) => keywordSet.add(keyword));
+  });
+
+  const candidates = recipes.filter(
+    (recipe) => !favorites.includes(recipe.id)
+  );
+
+  if (!keywordSet.size) {
+    return candidates.slice(0, 3);
+  }
+
+  const scored = candidates
+    .map((recipe) => {
+      let score = 0;
+      const candidateKeywords = [
+        ...extractKeywords(recipe.title),
+        ...extractKeywords(recipe.ingredients),
+      ];
+
+      candidateKeywords.forEach((keyword) => {
+        if (keywordSet.has(keyword)) score += 1;
+      });
+
+      return { recipe, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(({ recipe }) => recipe);
+
+  return scored.slice(0, 3);
+};
+
 export const useRecipeStore = create((set, get) => ({
   recipes: [],
   filteredRecipes: [],
@@ -39,11 +91,14 @@ export const useRecipeStore = create((set, get) => ({
     ingredient: '',
     maxPrepTime: '',
   },
+  favorites: [],
+  recommendations: [],
 
   // Add a new recipe
   addRecipe: (newRecipe) =>
     set((state) => {
       const recipes = [...state.recipes, newRecipe];
+      const recommendations = computeRecommendations(recipes, state.favorites);
       return {
         recipes,
         filteredRecipes: applyFilters(
@@ -51,6 +106,7 @@ export const useRecipeStore = create((set, get) => ({
           state.searchTerm,
           state.filters
         ),
+        recommendations,
       };
     }),
 
@@ -59,6 +115,7 @@ export const useRecipeStore = create((set, get) => ({
     set((state) => ({
       recipes,
       filteredRecipes: applyFilters(recipes, state.searchTerm, state.filters),
+      recommendations: computeRecommendations(recipes, state.favorites),
     })),
 
   // Update an existing recipe
@@ -67,6 +124,7 @@ export const useRecipeStore = create((set, get) => ({
       const recipes = state.recipes.map((r) =>
         r.id === updatedRecipe.id ? updatedRecipe : r
       );
+      const recommendations = computeRecommendations(recipes, state.favorites);
       return {
         recipes,
         filteredRecipes: applyFilters(
@@ -74,6 +132,7 @@ export const useRecipeStore = create((set, get) => ({
           state.searchTerm,
           state.filters
         ),
+        recommendations,
       };
     }),
 
@@ -81,13 +140,17 @@ export const useRecipeStore = create((set, get) => ({
   deleteRecipe: (id) =>
     set((state) => {
       const recipes = state.recipes.filter((r) => r.id !== id);
+      const favorites = state.favorites.filter((favId) => favId !== id);
+      const recommendations = computeRecommendations(recipes, favorites);
       return {
         recipes,
+        favorites,
         filteredRecipes: applyFilters(
           recipes,
           state.searchTerm,
           state.filters
         ),
+        recommendations,
       };
     }),
 
@@ -110,5 +173,38 @@ export const useRecipeStore = create((set, get) => ({
         state.searchTerm,
         state.filters
       ),
+    })),
+
+  addFavorite: (recipeId) =>
+    set((state) => {
+      if (state.favorites.includes(recipeId)) return state;
+      const favorites = [...state.favorites, recipeId];
+      return {
+        favorites,
+        recommendations: computeRecommendations(state.recipes, favorites),
+      };
+    }),
+
+  removeFavorite: (recipeId) =>
+    set((state) => {
+      const favorites = state.favorites.filter((id) => id !== recipeId);
+      return {
+        favorites,
+        recommendations: computeRecommendations(state.recipes, favorites),
+      };
+    }),
+
+  toggleFavorite: (recipeId) => {
+    const hasFavorite = get().favorites.includes(recipeId);
+    if (hasFavorite) {
+      get().removeFavorite(recipeId);
+    } else {
+      get().addFavorite(recipeId);
+    }
+  },
+
+  refreshRecommendations: () =>
+    set((state) => ({
+      recommendations: computeRecommendations(state.recipes, state.favorites),
     })),
 }));
