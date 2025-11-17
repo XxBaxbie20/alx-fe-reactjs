@@ -5,6 +5,8 @@ const AddRecipeForm = () => {
     const addRecipe  = useRecipeStore((state) => state.addRecipe);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [ingredients, setIngredients] = useState('');
+    const [prepTime, setPrepTime] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -15,10 +17,14 @@ const AddRecipeForm = () => {
             id: Date.now(),
             title,
             description,
+            ingredients,
+            prepTime: prepTime ? Number(prepTime) : '',
         });
 
         setTitle('');
         setDescription('');
+        setIngredients('');
+        setPrepTime('');
     };
 
     return (
@@ -36,6 +42,20 @@ const AddRecipeForm = () => {
             value={description}
             placeholder="Description"
             onChange={(e) => setDescription(e.target.value)}
+            />
+
+            <textarea
+            value={ingredients}
+            placeholder="Ingredients (comma separated)"
+            onChange={(e) => setIngredients(e.target.value)}
+            />
+
+            <input
+            type="number"
+            min="0"
+            value={prepTime}
+            placeholder="Prep time (minutes)"
+            onChange={(e) => setPrepTime(e.target.value)}
             />
 
             <button type="submit">Add Recipe</button>
