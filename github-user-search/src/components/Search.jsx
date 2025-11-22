@@ -19,7 +19,7 @@ function Search() {
     const data = await fetchUserData(username);
 
     if (!data) {
-      setError("Looks like we can’t find the user");
+      setError("Looks like we cant find the user");
     } else {
       setUser(data);
     }
@@ -51,7 +51,7 @@ function Search() {
       {loading && <p>Loading...</p>}
 
       {/* Error State */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>Looks like we cant find the user</p>}
 
       {/* Successful User Result */}
       {user && (
