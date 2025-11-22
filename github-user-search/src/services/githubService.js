@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const USER_BASE_URL = "https://api.github.com/users/";
-const SEARCH_BASE_URL = "https://api.github.com/search/users";
+const BASE_URL = "https://api.github.com";
 
-/**
- * Fetch a single GitHub user by username
- */
+// Optional: Use token if defined
+const GITHUB_API_KEY = import.meta.env.VITE_APP_GITHUB_API_KEY;
+
 export const fetchUserData = async (username) => {
   try {
-    const response = await axios.get(`${USER_BASE_URL}${username}`);
+    const response = await axios.get(`${BASE_URL}/users/${username}`, {
+      headers: GITHUB_API_KEY ? { Authorization: `token ${GITHUB_API_KEY}` } : {},
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching GitHub user:", error);
@@ -16,27 +17,27 @@ export const fetchUserData = async (username) => {
   }
 };
 
-/**
- * Advanced search for GitHub users
- */
+// Advanced search
 export const searchAdvancedUsers = async ({ username, location, minRepos, page = 1 }) => {
   try {
-    let query = username ? `${username} in:login` : "";
-    if (location) query += ` location:${location}`;
-    if (minRepos) query += ` repos:>=${minRepos}`;
+    let query = "";
+    if (username) query += `${username} in:login `;
+    if (location) query += `location:${location} `;
+    if (minRepos) query += `repos:>=${minRepos} `;
 
-    const response = await axios.get(
-      `${SEARCH_BASE_URL}?q=${encodeURIComponent(query)}&page=${page}&per_page=12`
-    );
+    const response = await axios.get(`${BASE_URL}/search/users`, {
+      headers: GITHUB_API_KEY ? { Authorization: `token ${GITHUB_API_KEY}` } : {},
+      params: {
+        q: query.trim(),
+        per_page: 10,
+        page,
+      },
+    });
 
-    const users = response.data.items || [];
-
-    // Fetch full details for each user to get location & public_repos
-    const detailedUsers = await Promise.all(users.map(user => fetchUserData(user.login)));
-
-    return detailedUsers;
+    // The search API returns an array in response.data.items
+    return response.data.items;
   } catch (error) {
-    console.error("GitHub API Advanced Search Error:", error);
-    return [];
+    console.error("Error performing advanced search:", error);
+    throw error;
   }
 };

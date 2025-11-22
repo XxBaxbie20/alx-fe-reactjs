@@ -6,8 +6,8 @@ export default function Search() {
   const [username, setUsername] = useState("");
   const [location, setLocation] = useState("");
   const [minRepos, setMinRepos] = useState("");
-  const [userData, setUserData] = useState(null); // simple search
-  const [users, setUsers] = useState([]); // advanced search
+  const [userData, setUserData] = useState(null); // single user
+  const [users, setUsers] = useState([]); // advanced search results
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
@@ -66,8 +66,8 @@ export default function Search() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      {/* Mode Toggle */}
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Mode toggle */}
       <div className="flex justify-center gap-4 mb-6">
         <button
           className={`px-4 py-2 rounded ${mode === "simple" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
@@ -83,7 +83,7 @@ export default function Search() {
         </button>
       </div>
 
-      {/* Simple Search Form */}
+      {/* Simple search form */}
       {mode === "simple" && (
         <form className="flex justify-center gap-4 mb-6" onSubmit={handleSimpleSearch}>
           <input
@@ -99,7 +99,7 @@ export default function Search() {
         </form>
       )}
 
-      {/* Advanced Search Form */}
+      {/* Advanced search form */}
       {mode === "advanced" && (
         <form className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" onSubmit={handleAdvancedSearch}>
           <input
@@ -129,20 +129,18 @@ export default function Search() {
         </form>
       )}
 
-      {/* Loading and Error */}
-      {loading && <p className="text-center">Loading...</p>}
-      {error && <p className="text-red-600 text-center">Looks like we cant find the user</p>}
+      {/* Loading & error */}
+      {loading && <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>}
+      {error && <p className="text-center text-red-600">Looks like we cant find the user</p>}
 
-      {/* Simple Search Result */}
+      {/* Simple search result */}
       {userData && (
-        <div className="user-card mx-auto mt-6 max-w-sm">
-          <img src={userData.avatar_url} alt="Avatar" />
-          <h2>{userData.login}</h2>
+        <div className="user-card bg-white dark:bg-gray-800 p-4 rounded shadow text-center mb-6">
+          <img src={userData.avatar_url} alt="Avatar" className="mx-auto w-32 h-32 rounded-full mb-4" />
+          <h2 className="font-bold text-xl mb-2">{userData.login}</h2>
           <p><strong>Name:</strong> {userData.name || "No name provided"}</p>
           <p><strong>Location:</strong> {userData.location || "N/A"}</p>
-          <p>
-            Public Repos: <span className="repo-badge">{userData.public_repos}</span>
-          </p>
+          <p><strong>Public Repos:</strong> {userData.public_repos}</p>
           <p>
             <a href={userData.html_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
               View GitHub Profile
@@ -151,16 +149,14 @@ export default function Search() {
         </div>
       )}
 
-      {/* Advanced Search Results */}
-      <div className="results-grid">
+      {/* Advanced search results */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {users.map((user) => (
-          <div key={user.id} className="user-card">
-            <img src={user.avatar_url} alt={user.login} />
-            <h2>{user.login}</h2>
-            <p>Location: {user.location || "N/A"}</p>
-            <p>
-              Public Repos: <span className="repo-badge">{user.public_repos}</span>
-            </p>
+          <div key={user.id} className="user-card bg-white dark:bg-gray-800 p-4 rounded shadow text-center">
+            <img src={user.avatar_url} alt={user.login} className="mx-auto w-24 h-24 rounded-full mb-2" />
+            <h2 className="font-bold text-lg">{user.login}</h2>
+            <p><strong>Location:</strong> {user.location || "N/A"}</p>
+            <p><strong>Public Repos:</strong> {user.public_repos || "N/A"}</p>
             <p>
               <a href={user.html_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
                 View Profile
@@ -170,7 +166,7 @@ export default function Search() {
         ))}
       </div>
 
-      {/* Load More Button */}
+      {/* Load more button */}
       {users.length > 0 && !loading && (
         <div className="flex justify-center mt-6">
           <button onClick={loadMore} className="bg-green-600 text-white p-2 rounded hover:bg-green-700">
