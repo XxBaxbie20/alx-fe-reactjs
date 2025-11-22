@@ -1,50 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom root variables for dark/light mode */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-text: rgba(255, 255, 255, 0.87);
+  --color-bg: #242424;
+  --color-link: #646cff;
+  --color-button-bg: #1a1a1a;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-text: #213547;
+    --color-bg: #ffffff;
+    --color-link: #646cff;
+    --color-button-bg: #f9f9f9;
+  }
+}
+
+/* Global body styles */
+body {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Headings */
+h1 {
+  font-size: 3.2rem;
+  line-height: 1.1;
+  margin: 2rem 0 1rem 0;
+  text-align: center;
+}
+
+/* Links */
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--color-link);
+  text-decoration: none;
 }
 a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Buttons */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-button-bg);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s;
 }
 button:hover {
   border-color: #646cff;
@@ -54,15 +70,29 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Card enhancements for GitHub user display */
+.user-card {
+  @apply border border-gray-300 dark:border-gray-700 p-4 rounded shadow hover:shadow-lg transition bg-white dark:bg-gray-800;
+}
+
+.user-card img {
+  @apply w-24 h-24 rounded-full mx-auto mb-2;
+}
+
+.user-card h2 {
+  @apply text-lg font-bold text-center mb-1;
+}
+
+.user-card p {
+  @apply text-center mb-1;
+}
+
+/* Badge for public repo count */
+.repo-badge {
+  @apply inline-block bg-green-600 text-white px-2 py-1 rounded-full text-sm font-semibold;
+}
+
+/* Responsive grid for advanced search results */
+.results-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6;
 }
