@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { searchGithubUser } from "./services/githubApi";
+import { fetchUserData } from "./services/githubService";
 import "./App.css";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
   const handleSearch = async () => {
     if (!username.trim()) return;
 
-    const data = await searchGithubUser(username);
+    const data = await fetchUserData(username);
     setUserData(data);
   };
 
