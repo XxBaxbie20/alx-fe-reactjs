@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "title": "Spaghetti Carbonara",
+    "summary": "A classic Italian pasta dish made with eggs, cheese, and bacon.",
+    "image": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "Spaghetti",
+      "Eggs",
+      "Pecorino cheese",
+      "Bacon",
+      "Black pepper"
+    ],
+    "instructions": [
+      "Boil spaghetti in salted water until al dente.",
+      "Cook bacon in a pan until crispy.",
+      "Whisk eggs and cheese together in a bowl.",
+      "Combine pasta with bacon and remove from heat.",
+      "Stir in egg mixture and season with black pepper."
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Chicken Tikka Masala",
+    "summary": "Grilled chicken cooked in a creamy tomato-based sauce.",
+    "image": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "Chicken breast",
+      "Yogurt",
+      "Tomatoes",
+      "Cream",
+      "Garlic",
+      "Spices"
+    ],
+    "instructions": [
+      "Marinate chicken in yogurt and spices.",
+      "Grill chicken until fully cooked.",
+      "Prepare tomato sauce with garlic and spices.",
+      "Add grilled chicken and cream to the sauce.",
+      "Simmer gently and serve hot."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Vegetable Stir Fry",
+    "summary": "A quick and healthy mix of vegetables sautéed in a savory sauce.",
+    "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "Bell peppers",
+      "Carrots",
+      "Broccoli",
+      "Soy sauce",
+      "Garlic",
+      "Olive oil"
+    ],
+    "instructions": [
+      "Heat oil in a wok or pan.",
+      "Add garlic and sauté briefly.",
+      "Add vegetables and stir fry on high heat.",
+      "Pour in soy sauce and mix well.",
+      "Cook until vegetables are tender-crisp."
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Beef Burger",
+    "summary": "A juicy beef burger served with cheese and fresh vegetables.",
+    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "Beef patty",
+      "Burger buns",
+      "Cheese",
+      "Lettuce",
+      "Tomato",
+      "Onion"
+    ],
+    "instructions": [
+      "Season and grill the beef patty.",
+      "Toast burger buns lightly.",
+      "Place patty on bun and add cheese.",
+      "Top with lettuce, tomato, and onion.",
+      "Assemble burger and serve warm."
+    ]
+  }
+]
