@@ -25,7 +25,7 @@ const HomePage = () => {
       </div>
 
       {/* Recipe Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {recipes.map((recipe) => (
           <Link to={`/recipe/${recipe.id}`} key={recipe.id}>
             <div className="bg-white rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300">
